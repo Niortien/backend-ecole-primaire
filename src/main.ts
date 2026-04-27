@@ -20,6 +20,12 @@ async function bootstrap() {
   // Sécurité : headers HTTP
   app.use(helmet());
 
+  // CORS
+  app.enableCors({
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    credentials: true,
+  });
+
   // Prefix global
   app.setGlobalPrefix('api');
 

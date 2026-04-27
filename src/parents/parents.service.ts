@@ -34,17 +34,17 @@ export class ParentsService {
   }
 
   findAll(): Promise<Parent[]> {
-    return this.repo.find({ relations: ['user'], order: { nom: 'ASC' } });
+    return this.repo.find({ relations: ['user', 'eleves', 'eleves.classe'], order: { nom: 'ASC' } });
   }
 
   async findOne(id: number): Promise<Parent> {
-    const parent = await this.repo.findOne({ where: { id }, relations: ['user'] });
+    const parent = await this.repo.findOne({ where: { id }, relations: ['user', 'eleves', 'eleves.classe'] });
     if (!parent) throw new NotFoundException(`Parent #${id} introuvable`);
     return parent;
   }
 
   async findByUserId(userId: number): Promise<Parent | null> {
-    return this.repo.findOne({ where: { user: { id: userId } }, relations: ['user'] });
+    return this.repo.findOne({ where: { user: { id: userId } }, relations: ['user', 'eleves', 'eleves.classe'] });
   }
 
   async update(id: number, dto: UpdateParentDto): Promise<Parent> {

@@ -1,33 +1,24 @@
-import { Controller, Get, Post, Delete, Body, Param, Query, ParseIntPipe, UseGuards, Request } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
-import { UserRole } from '../users/user.entity';
+import { Controller, Get, Post, Delete, Body, Param, Query, ParseIntPipe, Request } from '@nestjs/common';
 import { DepensesService } from './depenses.service';
 import { CreateDepenseDto } from './dto/create-depense.dto';
 
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('depenses')
 export class DepensesController {
   constructor(private readonly service: DepensesService) {}
 
   @Post()
-  @Roles(UserRole.COMPTABLE, UserRole.ADMIN)
   create(@Body() dto: CreateDepenseDto, @Request() req: any) {
     return this.service.create(dto, req.user.id);
   }
 
   @Get()
-  @Roles(UserRole.COMPTABLE, UserRole.ADMIN, UserRole.DIRECTEUR)
   findAll(@Query('dateDebut') dateDebut?: string, @Query('dateFin') dateFin?: string) {
     return this.service.findAll(dateDebut, dateFin);
   }
 
   @Get(':id')
-  @Roles(UserRole.COMPTABLE, UserRole.ADMIN, UserRole.DIRECTEUR)
   findOne(@Param('id', ParseIntPipe) id: number) { return this.service.findOne(id); }
 
   @Delete(':id')
-  @Roles(UserRole.ADMIN)
   remove(@Param('id', ParseIntPipe) id: number) { return this.service.remove(id); }
 }

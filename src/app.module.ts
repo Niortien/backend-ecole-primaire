@@ -23,7 +23,6 @@ import { FraisScolariteModule } from './frais-scolarite/frais-scolarite.module';
 import { PaiementsModule } from './paiements/paiements.module';
 import { DepensesModule } from './depenses/depenses.module';
 import { CaisseModule } from './caisse/caisse.module';
-import { MessagerieModule } from './messagerie/messagerie.module';
 import { RapportsModule } from './rapports/rapports.module';
 
 @Module({
@@ -54,6 +53,7 @@ import { RapportsModule } from './rapports/rapports.module';
         database: configService.get<string>('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: configService.get<string>('NODE_ENV') !== 'production',
+        ssl: configService.get<string>('DB_SSL') === 'true' ? { rejectUnauthorized: false } : false,
       }),
     }),
 
@@ -76,7 +76,6 @@ import { RapportsModule } from './rapports/rapports.module';
     PaiementsModule,
     DepensesModule,
     CaisseModule,
-    MessagerieModule,
     RapportsModule,
   ],
   controllers: [AppController],
